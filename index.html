@@ -134,7 +134,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/github/" style="font-size: 10px;">github</a>
+                        <a href="/tags/Elasticsearch/" style="font-size: 10px;">Elasticsearch</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Logstash/" style="font-size: 10px;">Logstash</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/日志系统/" style="font-size: 10px;">日志系统</a>
                     </div>
                 </section>
                 
@@ -199,6 +199,76 @@
     </div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Logstash-Elasticsearch-Kibana-搭建分布式日志系统" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/02/01/Logstash-Elasticsearch-Kibana-搭建分布式日志系统/" class="article-date">
+      <time datetime="2016-02-01T02:44:15.000Z" itemprop="datePublished">2016-02-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/01/Logstash-Elasticsearch-Kibana-搭建分布式日志系统/">Logstash + Elasticsearch + Kibana 搭建分布式日志系统</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><p>之前在腾讯工作的时候，曾在内部资料平台中看到过一篇关于<a href="https://www.elastic.co/">ELK</a>的教程。在12月份，项目开发过程中涉及到API对接部分，开发人员经常需要查看日志文件来debug传递的参数和返回的结果，但是多个项目系统日志文件存放在不同路径，而且直接查看文件又较难定位，故用Elasticsearch + Kibana 搭建了一套web日志系统。</p>
+<h2 id="u642D_u5EFA_u6B65_u9AA4"><a href="#u642D_u5EFA_u6B65_u9AA4" class="headerlink" title="搭建步骤"></a>搭建步骤</h2><h3 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h3><ol>
+<li><p>下载并解压Elasticsearch，我下载了<a href="https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz">Elasticsearch-2.1.1</a> </p>
+</li>
+<li><p>进入 Elasticsearch根目录，执行命令<code>bin/elasticsearch</code>，使用windows系统的可以执行命令<code>bin/elasticsearch.bat</code>，这样就可以启动 Elasticsearch服务了。</p>
+</li>
+<li><p>接着可以测试一下Elasticsearch是否正常启动，执行命令<code>curl -X GET http://localhost:9200/</code>，如果输入类似如下内容，那就说明成功了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> &#123;</span><br><span class="line">    "<span class="attribute">name</span>" : <span class="value"><span class="string">"Conan the Barbarian"</span></span>,</span><br><span class="line">    "<span class="attribute">cluster_name</span>" : <span class="value"><span class="string">"elasticsearch"</span></span>,</span><br><span class="line">    "<span class="attribute">version</span>" : <span class="value">&#123;</span><br><span class="line">        "<span class="attribute">number</span>" : <span class="value"><span class="string">"2.1.1"</span></span>,</span><br><span class="line">        "<span class="attribute">build_hash</span>" : <span class="value"><span class="string">"40e2c53a6b6c2972b3d13846e450e66f4375bd71"</span></span>,</span><br><span class="line">        "<span class="attribute">build_timestamp</span>" : <span class="value"><span class="string">"2015-12-15T13:05:55Z"</span></span>,</span><br><span class="line">        "<span class="attribute">build_snapshot</span>" : <span class="value"><span class="literal">false</span></span>,</span><br><span class="line">        "<span class="attribute">lucene_version</span>" : <span class="value"><span class="string">"5.3.1"</span></span><br><span class="line">    </span>&#125;</span>,</span><br><span class="line">    "<span class="attribute">tagline</span>" : <span class="value"><span class="string">"You Know, for Search"</span></span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kibana/">Kibana</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Logstash/">Logstash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日志系统/">日志系统</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/02/01/Logstash-Elasticsearch-Kibana-搭建分布式日志系统/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
   
     <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
